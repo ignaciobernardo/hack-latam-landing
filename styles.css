@@ -698,6 +698,23 @@ body {
   background: rgba(245, 166, 35, 0.02);
   align-items: center;
 }
+
+/* Clickable event card (LIGHTNING TALKS → Luma). Hover style matches the
+   .hub card in DÓNDE — same border highlight, glow and tiny translateX. */
+a.event-card {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: border-color 0.18s, background 0.18s, box-shadow 0.18s, transform 0.18s;
+}
+a.event-card:hover {
+  border-color: var(--amber);
+  background: rgba(245, 166, 35, 0.06);
+  box-shadow: 0 0 22px rgba(245, 166, 35, 0.18);
+  transform: translateX(2px);
+}
+a.event-card:hover .event-card__icon { color: var(--amber-bright); filter: drop-shadow(0 0 8px var(--glow)); }
+a.event-card:hover .event-card__name { color: #fff; }
 .event-card__icon { width: 64px; height: 64px; color: var(--amber); }
 .event-card__name {
   margin: 0 0 4px;
@@ -882,6 +899,7 @@ body {
   margin-bottom: 12px;
 }
 .sponsor-featured {
+  position: relative;
   padding: 20px 22px;
   border: 1px solid var(--amber);
   background: rgba(245, 166, 35, 0.04);
@@ -889,7 +907,10 @@ body {
   flex-direction: column;
   gap: 8px;
   box-shadow: 0 0 24px rgba(245, 166, 35, 0.08) inset;
-  transition: background 0.15s, box-shadow 0.15s;
+  transition: background 0.2s, box-shadow 0.2s, border-color 0.2s;
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
 }
 .sponsor-featured:hover {
   background: rgba(245, 166, 35, 0.08);
@@ -979,6 +1000,7 @@ body {
   gap: 10px;
 }
 .sponsor {
+  position: relative;
   padding: 14px 16px;
   border: 1px solid var(--amber-faint);
   background: rgba(245, 166, 35, 0.02);
@@ -986,7 +1008,10 @@ body {
   flex-direction: column;
   gap: 6px;
   min-height: 110px;
-  transition: border-color 0.15s, background 0.15s;
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+  transition: border-color 0.2s, background 0.2s;
 }
 .sponsor:hover {
   border-color: var(--amber-dim);
@@ -1000,6 +1025,77 @@ body {
   text-shadow: 0 0 8px var(--glow);
 }
 .sponsor p { margin: 0; font-size: 11.5px; line-height: 1.5; }
+.sponsor__body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: filter 0.25s, opacity 0.25s;
+}
+
+/* Logo overlay — each logo is set via a CSS custom property (--logo) on
+   the card and then used as a mask so the amber fill takes its shape.
+   A subtle dotted overlay keeps it visually in sync with the 3D halftone
+   icons on the hero cards. */
+.sponsor__logo {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+  background: var(--amber-bright);
+  filter: drop-shadow(0 0 10px rgba(245, 166, 35, 0.35));
+  -webkit-mask: var(--logo, none) center / 42% auto no-repeat;
+          mask: var(--logo, none) center / 42% auto no-repeat;
+}
+.sponsor__logo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(0,0,0,0.35) 0.8px, transparent 1.2px);
+  background-size: 3px 3px;
+  mix-blend-mode: multiply;
+}
+
+/* Per-sponsor logo URL — every sponsor now has one. */
+.sponsor[data-logo="kairos"],       .sponsor-featured[data-logo="kairos"]       { --logo: url("./assets/logos/kairos.png"); }
+.sponsor[data-logo="softserve"],    .sponsor-featured[data-logo="softserve"]    { --logo: url("./assets/logos/softserve.png"); }
+.sponsor[data-logo="faces"],        .sponsor-featured[data-logo="faces"]        { --logo: url("./assets/logos/faces.png"); }
+.sponsor[data-logo="minimax"],      .sponsor-featured[data-logo="minimax"]      { --logo: url("./assets/logos/minimax.png"); }
+.sponsor[data-logo="gptchain"]      { --logo: url("./assets/logos/gptchain.png"); }
+.sponsor[data-logo="openrouter"]    { --logo: url("./assets/logos/openrouter.png"); }
+.sponsor[data-logo="context7"]      { --logo: url("./assets/logos/context7.png"); }
+.sponsor[data-logo="residency"]     { --logo: url("./assets/logos/residency.png"); }
+.sponsor[data-logo="antigravity"]   { --logo: url("./assets/logos/antigravity.png"); }
+.sponsor[data-logo="emisso"]        { --logo: url("./assets/logos/emisso.png"); }
+.sponsor[data-logo="zavu"]          { --logo: url("./assets/logos/zavu.png"); }
+.sponsor[data-logo="bugster"]       { --logo: url("./assets/logos/bugster.png"); }
+.sponsor[data-logo="monologue"]     { --logo: url("./assets/logos/monologue.png"); }
+.sponsor[data-logo="v0"]            { --logo: url("./assets/logos/v0.png"); }
+.sponsor[data-logo="miguelpaz"]     { --logo: url("./assets/logos/miguelpaz.png"); }
+.sponsor[data-logo="boquila"]       { --logo: url("./assets/logos/boquila.png"); }
+.sponsor[data-logo="utec"]          { --logo: url("./assets/logos/utec.png"); }
+.sponsor[data-logo="logos"]         { --logo: url("./assets/logos/logos.png"); }
+.sponsor[data-logo="animo"]         { --logo: url("./assets/logos/animo.png"); }
+
+/* Universal hover reveal — fires for any card that has a --logo set. */
+.sponsor[data-logo]:hover .sponsor__logo,
+.sponsor-featured[data-logo]:hover .sponsor__logo {
+  opacity: 1;
+  transform: scale(1);
+}
+.sponsor[data-logo]:hover .sponsor__body,
+.sponsor-featured[data-logo]:hover .sponsor__body {
+  filter: blur(3px);
+  opacity: 0.08;
+}
+.sponsor[data-logo]:hover,
+.sponsor-featured[data-logo]:hover {
+  background: rgba(0, 0, 0, 0.55);
+  border-color: var(--amber);
+  box-shadow: 0 0 24px rgba(245, 166, 35, 0.22);
+}
 
 /* ───────────────────────────── view english + stats ────────────────────── */
 
