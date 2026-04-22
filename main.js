@@ -6,13 +6,24 @@ const AMBER = new THREE.Color("#f5a623");
 const AMBER_BRIGHT = new THREE.Color("#ffb83d");
 const AMBER_DIM = new THREE.Color("#6b4510");
 
-const CITIES = [
+const LAN_CITIES = [
   { name: "CHIHUAHUA",       country: "MEXICO",       lat:  28.6320, lon: -106.0691 },
   { name: "CIUDAD GUATEMALA", country: "GUATEMALA",   lat:  14.6349, lon:  -90.5069 },
   { name: "SAN SALVADOR",    country: "EL SALVADOR",  lat:  13.6929, lon:  -89.2182 },
   { name: "LIMA",            country: "PERU",         lat: -12.0464, lon:  -77.0428 },
   { name: "SANTIAGO",        country: "CHILE",        lat: -33.4489, lon:  -70.6693 },
 ];
+
+// Community cities outside the LAN-party set. They get markers and focus/zoom
+// behavior, but do not create interconnecting arc lines.
+const COMMUNITY_ONLY_CITIES = [
+  { name: "BOGOTA", country: "COLOMBIA", lat: 4.7110, lon: -74.0721 },
+  { name: "LA PAZ", country: "BOLIVIA", lat: -16.5000, lon: -68.1500 },
+  { name: "BUENOS AIRES", country: "ARGENTINA", lat: -34.6037, lon: -58.3816 },
+  { name: "SAN FRANCISCO", country: "USA", lat: 37.7749, lon: -122.4194 },
+];
+
+const ALL_MARKER_CITIES = [...LAN_CITIES, ...COMMUNITY_ONLY_CITIES];
 
 const GLOBE_RADIUS = 1.0;
 
@@ -260,14 +271,14 @@ const arcsGroup = new THREE.Group();
 scene.add(markersGroup);
 scene.add(arcsGroup);
 
-for (const city of CITIES) markersGroup.add(makeCityMarker(city));
+for (const city of ALL_MARKER_CITIES) markersGroup.add(makeCityMarker(city));
 
-const hub = CITIES[0];
-for (let i = 1; i < CITIES.length; i++) {
-  arcsGroup.add(makeArc(hub, CITIES[i], 0.25 + Math.random() * 0.15));
+const hub = LAN_CITIES[0];
+for (let i = 1; i < LAN_CITIES.length; i++) {
+  arcsGroup.add(makeArc(hub, LAN_CITIES[i], 0.25 + Math.random() * 0.15));
 }
-arcsGroup.add(makeArc(CITIES[1], CITIES[3], 0.15));
-arcsGroup.add(makeArc(CITIES[2], CITIES[4], 0.3));
+arcsGroup.add(makeArc(LAN_CITIES[1], LAN_CITIES[3], 0.15));
+arcsGroup.add(makeArc(LAN_CITIES[2], LAN_CITIES[4], 0.3));
 
 // Opaque occluder — renders first and writes depth so markers on the back
 // half of the sphere get hidden properly.
@@ -398,7 +409,7 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-const labelEls = CITIES.map((city) => {
+const labelEls = ALL_MARKER_CITIES.map((city) => {
   const el = document.createElement("div");
   el.className = "globe-label";
   el.style.opacity = "0";  // start hidden so they don't flash on load
@@ -493,7 +504,9 @@ const KEY_TO_ACTION = {
 function scrollToSection(id) {
   const el = document.getElementById(id);
   if (!el) return;
-  el.scrollIntoView({ behavior: "smooth", block: "start" });
+  const chromeOffset = 54; // sticky chrome + breathing room
+  const y = el.getBoundingClientRect().top + window.scrollY - chromeOffset;
+  window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
 }
 
 function runAction(action) {

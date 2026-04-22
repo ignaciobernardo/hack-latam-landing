@@ -990,6 +990,17 @@ a.event-card:hover .event-card__name { color: #fff; }
   letter-spacing: 0.14em;
   color: var(--amber);
   background: rgba(245, 166, 35, 0.02);
+  text-decoration: none;
+  transition: border-color 0.15s, background 0.15s, color 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+.tag:hover,
+.tag:focus-visible {
+  border-color: var(--amber);
+  background: rgba(245, 166, 35, 0.1);
+  color: var(--amber-bright);
+  box-shadow: 0 0 12px rgba(245, 166, 35, 0.24);
+  transform: translateY(-1px);
+  outline: none;
 }
 
 /* ───────────────────────────── Sponsors ────────────────────────────────── */

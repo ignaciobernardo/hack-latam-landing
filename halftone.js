@@ -212,11 +212,14 @@ export function mountHalftone(canvas, opts = {}) {
     const rx = parseFloat(canvas.dataset.rotX) || 0;
     const ry = parseFloat(canvas.dataset.rotY) || 0;
     const rz = parseFloat(canvas.dataset.rotZ) || 0;
+    const oy = parseFloat(canvas.dataset.offsetY) || 0;
     wrapper.rotation.set(
       THREE.MathUtils.degToRad(rx),
       THREE.MathUtils.degToRad(ry),
       THREE.MathUtils.degToRad(rz),
     );
+    // Per-canvas vertical offset to fine-tune centering by asset.
+    wrapper.position.y = oy;
 
     wrapper.add(obj);
     group.add(wrapper);
