@@ -475,10 +475,11 @@ setInterval(tickCountdown, 1000);
 mountAllHalftones();
 
 // ─── Terminal shortcuts (bottom of the sticky panel) ──────────────────────
-// Clicks on [h]/[m]/[t]/[p]/[q] buttons, single-letter keyboard shortcuts,
+// Clicks on the shortcut buttons, single-letter keyboard shortcuts,
 // and commands typed into the `hack@latam-sim$` prompt all resolve through
 // the same table. Unknown typed commands do nothing.
 const TERMINAL_TARGETS = {
+  apply:      () => window.open("https://hack.indies.la/apply/", "_blank", "noopener"),
   tldr:       () => scrollToSection("tldr"),
   perks:      () => scrollToSection("perks"),
   tracks:     () => scrollToSection("tracks"),
@@ -489,16 +490,20 @@ const TERMINAL_TARGETS = {
   help:       () => scrollToSection("faq"),        // [h] help → FAQ
   comunidades:() => scrollToSection("comunidades"),
   sponsors:   () => scrollToSection("sponsors"),
+  eventos:    () => scrollToSection("eventos"),
+  events:     () => scrollToSection("eventos"),
   top:        () => window.scrollTo({ top: 0, behavior: "smooth" }),
 };
 
 const KEY_TO_ACTION = {
+  a: "apply",
   f: "faq",
   d: "donde",
   t: "tracks",
   p: "perks",
   c: "comunidades",
   s: "sponsors",
+  e: "eventos",
 };
 
 function scrollToSection(id) {
