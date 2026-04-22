@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>hack@latam — world-sim — terminal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="./styles.css" />
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+  <main class="terminal">
+    <header class="terminal__chrome">
+      <div class="chrome__dots">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      </div>
+      <div class="chrome__title">hack@latam by <a class="link" href="https://indies.la/" target="_blank" rel="noopener">indies.la</a></div>
+    </header>
+
+    <div class="terminal__body">
+      <!-- PEDAZO 1 (sticky) -->
+      <aside class="panel panel--globe">
+        <h2 class="panel__heading"><span class="hl-block">HACK@LATAM</span></h2>
+        <div class="underline"></div>
+
+        <div class="cd-block">
+          <div class="cd-label">POSTULACIONES CIERRAN EN</div>
+          <div class="cd-grid">
+            <div class="cd-cell"><b id="cd-d">00</b><em>DÍAS</em></div>
+            <div class="cd-cell"><b id="cd-h">00</b><em>HORAS</em></div>
+            <div class="cd-cell"><b id="cd-m">00</b><em>MIN</em></div>
+            <div class="cd-cell"><b id="cd-s">00</b><em>SEG</em></div>
+          </div>
+          <a class="cd-cta" href="#apply">POSTULA AQUÍ &rarr;</a>
+        </div>
+
+        <div class="globe-wrap">
+          <canvas id="globe"></canvas>
+        </div>
+
+        <div class="panel__footer">
+          <p class="panel__status">POSTULACIONES ABIERTAS</p>
+
+          <div class="status-grid">
+            <div class="status-cell"><span class="muted">STATUS</span><b>OPEN</b></div>
+            <div class="status-cell"><span class="muted">PHASE</span><b>SELECTION</b></div>
+            <div class="status-cell"><span class="muted">MODE</span><b>REMOTE+LAN</b></div>
+          </div>
+
+          <div class="prompt-row">
+            <button type="button" class="shortcut" data-action="help">[h] help</button>
+            <button type="button" class="shortcut" data-action="map">[m] map</button>
+            <button type="button" class="shortcut" data-action="tracks">[t] tracks</button>
+            <button type="button" class="shortcut" data-action="perks">[p] perks</button>
+            <button type="button" class="shortcut" data-action="quit">[q] quit</button>
+          </div>
+          <form class="prompt" id="prompt-form" autocomplete="off">
+            <span class="prompt__label">hack@latam-sim$</span>
+            <input type="text" id="prompt-input" class="prompt__input" aria-label="Comando" spellcheck="false" />
+            <span class="caret"></span>
+          </form>
+        </div>
+      </aside>
+
+      <!-- PEDAZO 2 (scrolleable) -->
+      <section class="panel panel--content">
+
+        <!-- HERO -->
+        <h3 class="panel__eyebrow">WHAT IS HACK@LATAM?</h3>
+        <div class="underline underline--center"></div>
+
+        <h1 class="headline">
+          <span class="hl-block">Un hackathon de <span class="hl">impacto social</span>,<br/>abierto para todos.</span>
+        </h1>
+
+        <p class="date-pill">15 &middot; 16 &middot; 17 MAYO 2026 &nbsp;/&nbsp; TECH FOR GOOD</p>
+
+        <div class="cards">
+          <article class="card">
+            <canvas class="card__3d" data-halftone data-model="Coin Dollar Sign" data-slot="cash" aria-hidden="true"></canvas>
+            <p><b>US $6,000</b><br/>en CASH<br/>para los ganadores</p>
+          </article>
+          <article class="card">
+            <canvas class="card__3d" data-halftone data-model="Laptop" data-slot="credits" aria-hidden="true"></canvas>
+            <p><b>US $25K</b><br/>en créditos<br/>para todos</p>
+          </article>
+          <article class="card">
+            <canvas class="card__3d" data-halftone data-model="Headphones" data-slot="participants" data-rot-z="90" aria-hidden="true"></canvas>
+            <p><b>150</b><br/>participantes<br/>en toda LATAM</p>
+          </article>
+        </div>
+
+        <hr class="dotted" />
+
+        <!-- TL;DR -->
+        <section class="block" id="tldr">
+          <h3 class="block__title">TL;DR</h3>
+          <ul class="bullets">
+            <li>Hackathon de <b>impacto social</b>, abierto para todos.</li>
+            <li>Del <b>15 al 17 de mayo</b>, Latinoamérica se une para atacar los problemas que más afectan a la región.</li>
+            <li>Kick-off el <b>15 de mayo a las 6pm (UTC-4)</b>. 150 participantes, equipos de 1–4 personas.</li>
+            <li>Remoto, cualquiera puede participar, coordinado por <a class="link" href="#">Discord</a> en español.</li>
+            <li>¿Quieres pizza gratis y otros <a class="link" href="#perks">perks</a> ;)? Asiste al kick-off en Perú, Chile, Guatemala, El Salvador o México.</li>
+          </ul>
+        </section>
+
+        <hr class="dotted" />
+
+        <!-- PERKS -->
+        <section class="block" id="perks">
+          <h3 class="block__title">PERKS</h3>
+          <p class="block__lede">Cada miembro del equipo recibe&hellip;</p>
+          <ul class="bullets">
+            <li><b>1 mes</b> de <a class="link" href="#">MiniMax</a> coding plan plus</li>
+            <li><b>3 meses</b> del plan Hobby + <b>10 USD</b> en créditos SMS/Voz para <a class="link" href="#">Zavu</a></li>
+            <li><b>3 meses</b> de <a class="link" href="#">Monologue</a> pro</li>
+            <li><b>$30</b> en <a class="link" href="#">v0</a> by Vercel</li>
+            <li><b>30 créditos</b> para <a class="link" href="#">Faces</a></li>
+            <li><b>1 mes</b> de <a class="link" href="#">Context7</a> pro</li>
+            <li><b>$20</b> en créditos de <a class="link" href="#">OpenRouter</a></li>
+          </ul>
+        </section>
+
+        <hr class="dotted" />
+
+        <!-- TRACKS -->
+        <section class="block" id="tracks">
+          <h3 class="block__title">TRACKS</h3>
+          <p class="block__lede">Ayuda a tu comunidad, Latinoamérica o el mundo. Terminado significa <b>deployado</b>. Todos los proyectos deben ser <b>open source</b>.</p>
+
+          <div class="tracks">
+            <details class="track">
+              <summary>
+                <h4 class="track__name">TRANSPARENCY &amp; CORRUPTION</h4>
+                <p>Usa datos para exponer, rastrear y reducir la corrupción.</p>
+                <p class="dim">Scrapea gasto público, cruza contratos, construye dashboards que los ciudadanos puedan usar.</p>
+                <span class="track__toggle">más detalles <span class="track__toggle-arrow">&rarr;</span></span>
+              </summary>
+              <div class="track__details">
+                <h5 class="track__subhead">QUÉ ES</h5>
+                <p>Este track trata de hacer legible el poder. Construye herramientas que revelen cómo se mueve el dinero público, quién se beneficia, dónde ocurren abusos y cómo las instituciones pueden rendir cuentas.</p>
+                <h5 class="track__subhead">QUÉ ENCAJA</h5>
+                <ul class="bullets">
+                  <li>Proyectos que faciliten inspeccionar gasto público, compras, lobby, declaraciones patrimoniales o financiamiento político.</li>
+                  <li>Herramientas que crucen contratos, proveedores, presupuestos y registros públicos para detectar señales de alerta.</li>
+                  <li>Dashboards, alertas o herramientas de investigación para ciudadanos, periodistas, auditores o watchdogs.</li>
+                  <li>Sistemas que hagan procesos públicos opacos buscables, trazables y comprensibles.</li>
+                </ul>
+                <h5 class="track__subhead">QUÉ NO ENCAJA</h5>
+                <ul class="bullets bullets--dim">
+                  <li>Herramientas govtech genéricas sin ángulo anticorrupción.</li>
+                  <li>Dashboards sin recolección, verificación o valor investigativo real.</li>
+                  <li>Campañas de concientización sin producto o mecanismo concreto.</li>
+                  <li>Proyectos que visualicen datos pero no ayuden a detectar, explicar o reducir abusos.</li>
+                </ul>
+              </div>
+            </details>
+
+            <details class="track">
+              <summary>
+                <h4 class="track__name">ENVIRONMENT &amp; CLIMATE RISK</h4>
+                <p>Rastrea, predice y mitiga el daño ambiental.</p>
+                <p class="dim">Datos satelitales, sensores de calidad del aire, predicción de incendios: monitorea lo que los gobiernos no.</p>
+                <span class="track__toggle">más detalles <span class="track__toggle-arrow">&rarr;</span></span>
+              </summary>
+              <div class="track__details">
+                <h5 class="track__subhead">QUÉ ES</h5>
+                <p>Este track trata de ver el daño ambiental antes y responder más rápido. Construye herramientas que monitoreen riesgo, pronostiquen daño y ayuden a comunidades, respondedores o instituciones a actuar antes de que empeore.</p>
+                <h5 class="track__subhead">QUÉ ENCAJA</h5>
+                <ul class="bullets">
+                  <li>Proyectos que monitoreen daño ambiental con datos satelitales, sensores, drones o datasets públicos.</li>
+                  <li>Herramientas para detección de incendios, predicción de inundaciones, calidad del aire, riesgo hídrico o extracción ilegal.</li>
+                  <li>Sistemas que ayuden a comunidades, respondedores o reguladores a actuar antes ante amenazas climáticas y ambientales.</li>
+                  <li>Productos que expongan daño ambiental que gobiernos o empresas no monitorean bien.</li>
+                </ul>
+                <h5 class="track__subhead">QUÉ NO ENCAJA</h5>
+                <ul class="bullets bullets--dim">
+                  <li>Apps climáticas genéricas sin caso de uso claro de monitoreo, predicción o mitigación.</li>
+                  <li>Calculadoras de huella de carbono sin datos novedosos, intervención o valor operacional.</li>
+                  <li>Herramientas de branding de sustentabilidad sin reducción de riesgo real.</li>
+                  <li>Proyectos que describan problemas ambientales sin ayudar a detectar, pronosticar o responder.</li>
+                </ul>
+              </div>
+            </details>
+
+            <details class="track">
+              <summary>
+                <h4 class="track__name">DEF/ACC</h4>
+                <p>Construye y acelera tecnologías que fortalezcan las defensas de la sociedad.</p>
+                <p class="dim">De ciber-ataques a desinformación a riesgo de infraestructura crítica: detecta amenazas temprano y haz los sistemas más resilientes, seguros y difíciles de romper.</p>
+                <span class="track__toggle">más detalles <span class="track__toggle-arrow">&rarr;</span></span>
+              </summary>
+              <div class="track__details">
+                <h5 class="track__subhead">QUÉ ES</h5>
+                <p>DEF/ACC trata de acelerar tecnologías que ayuden a la sociedad a defenderse, especialmente contra amenazas a gran escala como ciberataques, riesgo biológico, desinformación y fallas en sistemas críticos. Construye cosas que prevengan daño, detecten amenazas temprano y hagan personas, instituciones e infraestructura más resilientes bajo presión.</p>
+                <h5 class="track__subhead">QUÉ ENCAJA</h5>
+                <ul class="bullets">
+                  <li>Ciberseguridad, seguridad de IA, protección de infraestructura crítica, detección de vulnerabilidades y parcheo a escala.</li>
+                  <li>Bioseguridad, detección de brotes, seguridad de laboratorios y sistemas de alerta temprana.</li>
+                  <li>Anti-desinformación, proveniencia, detección de bots y herramientas que reduzcan riesgo de persuasión masiva.</li>
+                  <li>Productos que amplifiquen la agencia humana bajo IA, ayudando a supervisar sistemas, mantenerse en el loop y evitar desplazamiento.</li>
+                  <li>En general, proyectos que mejoren la capacidad defensiva de la sociedad en vez de solo hacer sistemas más poderosos.</li>
+                </ul>
+                <h5 class="track__subhead">QUÉ NO ENCAJA</h5>
+                <ul class="bullets bullets--dim">
+                  <li>Apps de IA genéricas sin caso de uso defensivo.</li>
+                  <li>Capacidades puramente ofensivas.</li>
+                  <li>Proyectos de &ldquo;seguridad&rdquo; sin modelo de amenaza o mecanismo de protección concreto.</li>
+                  <li>Ideas vagas de bien social que no hagan personas, instituciones o infraestructura más resilientes.</li>
+                </ul>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <hr class="dotted" />
+
+        <!-- DÓNDE -->
+        <section class="block" id="donde">
+          <h3 class="block__title">DÓNDE</h3>
+          <p class="block__lede">Remoto, desde cualquier lugar. Opcionalmente únete al kick-off en Perú, Chile, Guatemala, El Salvador o México. Asiste en persona por perks exclusivos y comida gratis :)</p>
+
+          <article class="event-card">
+            <svg class="event-card__icon" viewBox="0 0 64 64" aria-hidden="true">
+              <circle cx="32" cy="32" r="26" fill="none" stroke="currentColor" stroke-width="2" />
+              <circle cx="32" cy="32" r="20" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2 3"/>
+              <line x1="6" y1="32" x2="58" y2="32" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+              <ellipse cx="32" cy="32" rx="26" ry="10" fill="none" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+            </svg>
+            <div class="event-card__body">
+              <h4 class="event-card__name">MUNDIAL</h4>
+              <p class="event-card__when"><b>15 mayo, 6pm (UTC-4)</b></p>
+              <p class="dim">Todo el evento corre online vía <a class="link" href="#">Discord</a>, abierto para todos.</p>
+            </div>
+          </article>
+
+          <h4 class="subheading">LAN PARTIES</h4>
+          <div class="lan-parties">
+            <article class="city" data-focus-lat="-33.4489" data-focus-lon="-70.6693">
+              <div class="city__head">
+                <h4 class="city__name">SANTIAGO</h4>
+                <div class="city__time">5PM</div>
+              </div>
+              <p class="dim">En <a class="link" href="#">UDD</a>, organizado por <a class="link" href="https://indies.la/" target="_blank" rel="noopener">Indies</a>.</p>
+              <div class="city__coords">33.4489&deg;S, 70.6693&deg;W &middot; CHILE</div>
+            </article>
+            <article class="city" data-focus-lat="-12.0464" data-focus-lon="-77.0428">
+              <div class="city__head">
+                <h4 class="city__name">LIMA</h4>
+                <div class="city__time">5PM</div>
+              </div>
+              <p class="dim">En Universidad de Ingeniería y Tecnología, organizado por <a class="link" href="#">AI Playground</a>.</p>
+              <div class="city__coords">12.0464&deg;S, 77.0428&deg;W &middot; PERU</div>
+            </article>
+            <article class="city" data-focus-lat="14.6349" data-focus-lon="-90.5069">
+              <div class="city__head">
+                <h4 class="city__name">CIUDAD DE GUATEMALA</h4>
+                <div class="city__time">4PM</div>
+              </div>
+              <p class="dim">En Campus Tec, organizado por <a class="link" href="#">582</a> y <a class="link" href="#">WeSolve</a>.</p>
+              <div class="city__coords">14.6349&deg;N, 90.5069&deg;W &middot; GUATEMALA</div>
+            </article>
+            <article class="city" data-focus-lat="13.6929" data-focus-lon="-89.2182">
+              <div class="city__head">
+                <h4 class="city__name">SAN SALVADOR</h4>
+                <div class="city__time">4PM</div>
+              </div>
+              <p class="dim">En Universidad Francisco Gavidia, organizado por <a class="link" href="#">AI/ABS</a> y <a class="link" href="#">C3</a>.</p>
+              <div class="city__coords">13.6929&deg;N, 89.2182&deg;W &middot; EL SALVADOR</div>
+            </article>
+            <article class="city" data-focus-lat="28.6320" data-focus-lon="-106.0691">
+              <div class="city__head">
+                <h4 class="city__name">CHIHUAHUA</h4>
+                <div class="city__time">4PM</div>
+              </div>
+              <p class="dim">Organizado por <a class="link" href="#">Escuelita Maker</a>.</p>
+              <div class="city__coords">28.6320&deg;N, 106.0691&deg;W &middot; MEXICO</div>
+            </article>
+          </div>
+        </section>
+
+        <hr class="dotted" />
+
+        <!-- FAQ -->
+        <section class="block" id="faq">
+          <h3 class="block__title">FAQ</h3>
+          <div class="faq">
+            <details class="faq__item">
+              <summary>Quiero armar equipo pero no conozco a nadie. ¿Puedo unirme igual?</summary>
+              <div class="faq__body">Sí. Únete a nuestro <a class="link" href="https://indies.la/" target="_blank" rel="noopener">Discord</a> y ve al canal <b>#hackathon</b>. Encontrarás gente buscando compañeros. Sé proactivo: crea un thread en su mensaje, preséntate y di qué tipo de equipo quieres formar.</div>
+            </details>
+            <details class="faq__item">
+              <summary>¿Puedo formar equipo con alguien de otro país?</summary>
+              <div class="faq__body">Sí. Cualquiera de cualquier lugar puede participar. Totalmente remoto.</div>
+            </details>
+            <details class="faq__item">
+              <summary>Parte de mi equipo participa online, otros quieren asistir al kick-off en persona. ¿Está bien?</summary>
+              <div class="faq__body">Sí. Llena el formulario para reservar tu lugar en el kick-off.</div>
+            </details>
+            <details class="faq__item">
+              <summary>¿Y si gano? ¿Cómo entregan los premios?</summary>
+              <div class="faq__body">Si ganas, podemos tener problemas para entregar premios en algunos países. Transferiremos a un familiar o alguien cercano.</div>
+            </details>
+            <details class="faq__item">
+              <summary>¿Soy muy viejo? ¿Muy joven? ¿Puedo participar?</summary>
+              <div class="faq__body">Sí. No discriminamos por edad, género o religión. Cualquiera puede unirse.</div>
+            </details>
+            <details class="faq__item">
+              <summary>I speak english. Can I still join?</summary>
+              <div class="faq__body">Yes. Coordination is in Spanish, but ~90% of staff speak English. DM us if you're lost.</div>
+            </details>
+            <details class="faq__item">
+              <summary>¿Puedo sponsorear el evento?</summary>
+              <div class="faq__body">Sí. Efectivo y/o créditos. Mira el deck para detalles.</div>
+            </details>
+          </div>
+        </section>
+
+        <hr class="dotted" />
+
+        <!-- COMUNIDADES -->
+        <section class="block" id="comunidades">
+          <h3 class="block__title">COMUNIDADES</h3>
+          <p class="block__lede">Un hackathon de comunidades en la región que quieren verla florecer.</p>
+          <div class="tag-row">
+            <span class="tag">THE HACKATHON COMPANY</span>
+            <span class="tag">UNITE</span>
+            <span class="tag">DEV REMOTO SIMPLE</span>
+            <span class="tag">THE 502 PROJECT</span>
+            <span class="tag">AI PLAYGROUND</span>
+            <span class="tag">NUCLEOLAB</span>
+            <span class="tag">CRAFTER STATION</span>
+            <span class="tag">SUNDAI LATAM HACKER CLUB</span>
+            <span class="tag">AI LABS</span>
+            <span class="tag">WE SOLVE</span>
+            <span class="tag">ESCUELITA MAKER</span>
+            <span class="tag">INDIES.LA</span>
+          </div>
+        </section>
+
+        <hr class="dotted" />
+
+        <!-- PATROCINADORES -->
+        <section class="block" id="sponsors">
+          <h3 class="block__title">PATROCINADORES</h3>
+          <p class="block__lede">No habría sido posible ayudar a la región sin nuestros generosos patrocinadores.</p>
+
+          <div class="sponsors-featured">
+            <div class="sponsor-featured"><h4>KAIROS</h4><p>Talento en seguridad de IA a escala. Mitigando riesgos de IA avanzada.</p></div>
+            <div class="sponsor-featured"><h4>SOFTSERVE</h4><p>Ingeniería digital, datos y soluciones en la nube.</p></div>
+            <div class="sponsor-featured"><h4>FACES</h4><p>Presentaciones interactivas con IA: pitch decks, portafolios, guías.</p></div>
+            <div class="sponsor-featured"><h4>MINIMAX</h4><p>Modelos multimodales de IA: texto, audio, imagen, video, música.</p></div>
+          </div>
+
+          <div class="sponsors">
+            <div class="sponsor"><h4>GPT CHAIN</h4><p class="dim">ChatGPT como motor de operaciones 24/7 — flujos de varios pasos, sin barreras técnicas.</p></div>
+            <div class="sponsor"><h4>OPENROUTER</h4><p class="dim">Una sola API para acceder a todos los modelos principales.</p></div>
+            <div class="sponsor"><h4>CONTEXT7</h4><p class="dim">Documentación al día para LLMs y editores de código con IA.</p></div>
+            <div class="sponsor"><h4>THE RESIDENCY</h4><p class="dim">Cohortes de 3–6 meses donde builders viven y trabajan juntos full-time.</p></div>
+            <div class="sponsor"><h4>ANTIGRAVITY CAPITAL</h4><p class="dim">Fondo en SF. Puentes: una semana viviendo con acceso directo a founders top.</p></div>
+            <div class="sponsor"><h4>EMISSO</h4><p class="dim">Software a medida con agentes e ingenieros senior. Entregado en semanas.</p></div>
+            <div class="sponsor"><h4>ZAVU</h4><p class="dim">Una API. Todos los canales de mensajería: SMS, WhatsApp, Telegram, email, voz.</p></div>
+            <div class="sponsor"><h4>BUGSTER</h4><p class="dim">Agentes de IA que prueban tu app en navegadores reales. QA sin dolor.</p></div>
+            <div class="sponsor"><h4>MONOLOGUE</h4><p class="dim">App de voz-a-texto para macOS e iOS. Escribe 3× más rápido.</p></div>
+            <div class="sponsor"><h4>v0 BY VERCEL</h4><p class="dim">De prompt a app full-stack en producción.</p></div>
+            <div class="sponsor"><h4>MIGUEL PAZ</h4><p class="dim">Pasarela de pagos recurrentes. Revenu.</p></div>
+            <div class="sponsor"><h4>BOQUILA FOUNDATION</h4><p class="dim">IA para la conservación de la biodiversidad y desarrollo sostenible.</p></div>
+            <div class="sponsor"><h4>UTEC VENTURES</h4><p class="dim">Empoderando startups en etapa temprana en Latinoamérica.</p></div>
+            <div class="sponsor"><h4>LOGOS</h4><p class="dim">Monitorea, predice y optimiza procesos industriales críticos.</p></div>
+            <div class="sponsor"><h4>ANIMO</h4><p class="dim">Crea videos animados a partir de texto.</p></div>
+          </div>
+        </section>
+
+        <!-- stats bar solo dentro del pedazo 2 -->
+        <footer class="stats-bar">
+          <div class="stat">
+            <div class="stat__label">BUILDERS</div>
+            <div class="stat__value">150</div>
+          </div>
+          <div class="stat">
+            <div class="stat__label">CITIES</div>
+            <div class="stat__value">5</div>
+          </div>
+          <div class="stat">
+            <div class="stat__label">COUNTRIES</div>
+            <div class="stat__value">5</div>
+          </div>
+          <div class="stat">
+            <div class="stat__label">TRACKS</div>
+            <div class="stat__value">3</div>
+          </div>
+          <div class="stat">
+            <div class="stat__label">DURATION</div>
+            <div class="stat__value">72H</div>
+          </div>
+          <div class="stat">
+            <div class="stat__label">GLOBAL IMPACT</div>
+            <div class="stat__value">&infin;</div>
+          </div>
+        </footer>
+
+      </section>
+    </div>
+  </main>
+
+  <div class="crt" aria-hidden="true"></div>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
